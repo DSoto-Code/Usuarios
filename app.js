@@ -9,15 +9,15 @@ const con = mysql.createConnection({
     user: 'root',
     password: 'MiP0Ddav1d',
     database: '5IV9',
-    charset: 'utf8mb4' 
+    charset: 'utf8mb4'
 });
-
 
 con.connect((err) => {
     if (err) {
-        console.error("Error al conectar con la base de datos:", err);
+        console.error("No se pudo conectar a la base de datos", err);
         process.exit(1);
-    }   
+    }
+    
 });
 
 
@@ -27,21 +27,26 @@ app.use(express.static('public'));
 
 
 app.post('/agregarUsuario', (req, res) => {
-    const { id, nombre } = req.body;
+    const { nombre } = req.body;
 
-    if (!id || !nombre) {
-        return res.status(400).send("Inserta el ID y el nombre");
+    if (!nombre) {
+        return res.status(400).send("Inserta el nombre");
     }
 
-    const sql = 'INSERT INTO usuario (id_usuario, nombre) VALUES (?, ?)';
-    con.query(sql, [id, nombre], (err, result) => {
+    const sql = 'INSERT INTO usuario (nombre) VALUES (?)';
+    con.query(sql, [nombre], (err, result) => {
         if (err) {
-            console.error("Error al insertar usuario:", err);
-            return res.status(500).send("Error al agregar el usuario.");
+            console.error("No se ha podido agregar el usuario", err);
+            return res.status(500).send("No se ha podido agregar el usuario");
         }
-        return res.send(`<h2>El usuario se ha agregado</h2>
-                         <p><strong>ID:</strong> ${id}</p>
-                         <p><strong>Nombre:</strong> ${nombre}</p>`);
+
+        
+        return res.send(`
+            <h2>✅ Usuario agregado correctamente</h2>
+            <p><strong>ID asignado:</strong> ${result.insertId}</p>
+            <p><strong>Nombre:</strong> ${nombre}</p>
+            <a href="/">⬅️ Volver</a>
+        `);
     });
 });
 
@@ -49,11 +54,12 @@ app.post('/agregarUsuario', (req, res) => {
 app.get('/obtenerUsuario', (req, res) => {
     con.query('SELECT * FROM usuario', (err, resultados) => {
         if (err) {
-            console.error("No se pudieron obtener usuarios:", err);
-            return res.status(500).send("No se pudieron btener usuarios.");
+            console.error("No se ha podido obtener el usuario:", err);
+            return res.status(500).send("No se ha podido obtener el usuario");
         }
 
         let tablaHTML = `
+        <h2>Lista de Usuarios</h2>
         <table border="1" cellpadding="5" cellspacing="0">
             <tr>
                 <th>#</th>
@@ -70,30 +76,31 @@ app.get('/obtenerUsuario', (req, res) => {
             </tr>`;
         });
 
-        tablaHTML += `</table>`;
-        res.send(`<h2>Lista de Usuarios</h2>${tablaHTML}`);
+        tablaHTML += `</table><br><a href="/">⬅️ Volver</a>`;
+        res.send(tablaHTML);
     });
 });
+
 
 app.post('/borrarUsuario', (req, res) => {
     const { id } = req.body;
 
     if (!id) {
-        return res.status(400).send("Inserta el ID para eliminar");
+        return res.status(400).send("Inserta el ID del usuario a borrar");
     }
 
     const sql = 'DELETE FROM usuario WHERE id_usuario = ?';
     con.query(sql, [id], (err, result) => {
         if (err) {
-            console.error("NBo se pudo borrar usuario:", err);
-            return res.status(500).send("No se pudo borrar el usuario.");
+            console.error("No se ha podido borrar el usuario", err);
+            return res.status(500).send("No se ha podido borrar el usuario");
         }
 
         if (result.affectedRows === 0) {
             return res.status(404).send("No se ha encontrado el usuario");
         }
 
-        res.send(`El usuario con ID ${id} se ha eliminado correctamente.`);
+        res.send(`Se ha eliminado correctamente el usuario con ID: ${id} .<br><a href="/">⬅️ Volver</a>`);
     });
 });
 
