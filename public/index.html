@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestión de Usuarios</title>
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: #f3f4f6;
+      color: #333;
+      display: flex;
+      justify-content: center; /* Centrado horizontal */
+      align-items: center;     /* Centrado vertical */
+      height: 100vh;           /* Ocupa toda la pantalla */
+      margin: 0;
+      padding: 0;
+      flex-direction: column;
+    }
+
+    h1 {
+      color: #1e3a8a;
+      text-align: center;
+      margin-top: 5px; /* Muy cerca del borde superior */
+      margin-bottom: 20px;
+    }
+
+    .grid-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    section {
+      background: white;
+      border-radius: 12px;
+      border: 1px solid #d1d5db;
+      width: 280px;  /* Ancho fijo */
+      height: 380px; /* Alto fijo */
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      padding: 20px;
+      justify-content: center; /* Centra contenido vertical */
+      align-items: center;     /* Centra contenido horizontal */
+    }
+
+    h2 {
+      margin: 0;
+      color: #1e40af;
+      text-align: center;
+    }
+
+    input[type="text"] {
+      width: 90%;
+      padding: 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    input[type="submit"] {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s;
+      width: 60%;
+      margin-top: 15px;
+      display: block;
+      text-align: center; /* Centrado texto del botón */
+    }
+
+    input[type="submit"]:hover {
+      background: #1e40af;
+    }
+  </style>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <h1>Gestión de Usuarios</h1>
+
+  <div class="grid-container">
+    <!-- Sección para registrar usuario -->
+    <section>
+      <h2>Registrar Usuario</h2>
+      <form action="/agregarUsuario" method="post">
+        <input type="text" id="nombre" name="nombre" placeholder="Nombre de usuario" required>
+        <input type="submit" value="Registrar">
+      </form>
+    </section>
+
+    <!-- Sección para buscar usuario -->
+    <section>
+      <h2>Buscar Usuario</h2>
+      <form action="/buscarUsuario" method="get">
+        <input type="text" id="busqueda" name="busqueda" placeholder="ID o nombre" required>
+        <input type="submit" value="Buscar">
+      </form>
+    </section>
+
+    <!-- Sección para borrar usuario -->
+    <section>
+      <h2>Borrar Usuario</h2>
+      <form action="/borrarUsuario" method="post">
+        <input type="text" id="idBorrar" name="idBorrar" placeholder="ID del usuario" required>
+        <input type="submit" value="Borrar">
+      </form>
+    </section>
+
+    <!-- Sección para editar usuario -->
+    <section>
+      <h2>Editar Usuario</h2>
+      <form action="/editarUsuario" method="post">
+        <input type="text" id="idEditar" name="idEditar" placeholder="ID del usuario" required>
+        <input type="text" id="nuevoNombre" name="nuevoNombre" placeholder="Nuevo nombre" required>
+        <input type="submit" value="Editar">
+      </form>
+    </section>
+  </div>
+</body>
+</html>
